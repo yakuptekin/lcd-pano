@@ -1,15 +1,21 @@
 {
-  "name": "LCD Pano",
-  "description": "Okullar için Dijital Pano Uygulaması",
-  "version": "1.2.1",
-  "manifest_version": 2,
-  "minimum_chrome_version": "25",
-  "app": { "background": { "scripts": ["js/background.js"] } },
-  "permissions": [
-    "storage", "contextMenus", "webview", "alarms", "fullscreen",
-    { "mediaGalleries": ["read"] },
-    "http://api.wunderground.com/*",
-    "http://autocomplete.wunderground.com/*"
-  ],
-  "icons": { "16": "img/icon16.png", "128": "img/icon128.png" }
+   "app": {
+      "background": {
+         "scripts": [ "js/background.js" ]
+      }
+   },
+   "description": "Okullar için Dijital Pano Uygulaması",
+   "icons": {
+      "128": "img/icon128.png",
+      "16": "img/icon16.png"
+   },
+   "manifest_version": 2,
+   "minimum_chrome_version": "25",
+   "name": "LCD Pano",
+   "permissions": [ "storage", "contextMenus", {
+      "fileSystem": [ "write" ]
+   }, "webview", "fullscreen", {
+      "mediaGalleries": [ "read" ]
+   }, "http://api.wunderground.com/*", "http://autocomplete.wunderground.com/*" ],
+   "version": "2.1.3"
 }

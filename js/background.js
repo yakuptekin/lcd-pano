@@ -1,104 +1,423 @@
-var acikPencereler = {};
-var restartRequest = false;
-var kayitlar = {
-	okul_adi: 'POLATLI TİCARET MESLEK LİSESİ',
-	duyuru: 'LCD Pano © 2013',
-	scrolldelay: '80',
-	scrollamount: '30',
-	haber_kat : 'mansetler-m',
-	nob_per_punto: '20',
-	adres: 'Polatli, Turkey',
-	apikey: '',
-	slayt_hizi: '5',
-	ogretim_turu: 'tamgn',
-	nobet_degisim_saati: '13:00',
-	nobet_kategorileri: 'MÜDÜR YRD.,BAHÇE,ZEMİN KAT,1.KAT,2.KAT,3.KAT'
-}
-
 function panoPenceresi() {
-	chrome.app.window.create('pano.html', {
-		width: 1200, height: 675,
-		minWidth: 1200, minHeight: 675,
-		id: 'pano', frame: 'none'
-	}, function (w) {
-		acikPencereler.pano = w;
-		w.onClosed.addListener(function() {
-			chrome.alarms.clearAll();
-			delete acikPencereler.pano;
-			if(restartRequest) {
-				panoPenceresi();
-				restartRequest = false;
-			}
-		});
-	});
-}
-
-function ayarlarPenceresi() {
-	chrome.app.window.create('ayarlar.html', {
-		width: 1000, height: 550,
-		minWidth: 1000, minHeight: 550,
-		maxWidth: 1000, minWidth: 550,
-		id: 'ayarlar'
-	}, function (w) {
-		acikPencereler.ayarlar = w;
-		w.onClosed.addListener(function() {
-			delete acikPencereler.ayarlar;
+	chrome.storage.local.get(function (degerler) {
+		chrome.app.window.create('pano.html', {
+			bounds: { width: 1200, height: 675 },
+			minWidth: 1200, minHeight: 675, frame: 'none', state: degerler.ekranmodu
 		});
 	});
 }
 
 chrome.runtime.onInstalled.addListener(function(evt) {
+	var kayitlar = {
+	'version': chrome.runtime.getManifest().version, 
+	'okul_adi': 'POLATLI TİCARET MESLEK LİSESİ',
+	'duyuru': 'LCD Pano © 2014',
+	'haber_kategorisi' : 'mansetler-m',
+	'nob_per_punto': '20',
+	'adres': 'Polatli, Turkey',
+	'apikey': '',
+	'slayt_hizi': '5',
+	'slayt_cuboid': '5',
+	'sureli_gosterim_hizi': '60',
+	'ekranmodu':'fullscreen',
+	'ogretim_turu': 'tamgn',
+	'nobet_degisim_saati': '12:30',
+	'nobet_kategorileri': 'MÜDÜR YRD.,BAHÇE,ZEMİN KAT,1.KAT,2.KAT,3.KAT',
+	// v2.0
+	'siniflar': '9-A,9-B,9-C,10-A,10-B,10-C',
+	'ders_prog_punto': '16',
+	'gunluk_ders_sayisi': '8',
+	'kayan_yazi_hizi': '5',
+	'sag_moduller': 'ikiside',
+	'sol_moduller': 'ikiside',
+	'ozelmodulhtml': '<strong>Özelleştirilebilir İçerik</strong><br>Bu modülü ayarlardan istediğiniz gibi özelleştirebilirsiniz.',
+	'ozelmodulbaslik': 'Özel Modül',
+	'ders_programi' : {
+        'pzt': { 'sabah' : {}, 'oglen': {} },
+        'sal': { 'sabah' : {}, 'oglen': {} },
+        'crs': { 'sabah' : {}, 'oglen': {} },
+        'per': { 'sabah' : {}, 'oglen': {} },
+        'cum': { 'sabah' : {}, 'oglen': {} },
+    },
+    'ders_saatleri' : { 'sabah': {
+    	'01' : { 'basla_saati' : '08:30', 'bitis_saati': '09:10'},
+    	'02' : { 'basla_saati' : '09:20', 'bitis_saati': '10:00'},
+    	'03' : { 'basla_saati' : '10:10', 'bitis_saati': '10:50'},
+    	'04' : { 'basla_saati' : '11:00', 'bitis_saati': '11:40'},
+    	'05' : { 'basla_saati' : '12:30', 'bitis_saati': '13:10'},
+    	'06' : { 'basla_saati' : '13:20', 'bitis_saati': '14:00'},
+    	'07' : { 'basla_saati' : '14:10', 'bitis_saati': '14:50'},
+    	'08' : { 'basla_saati' : '15:30', 'bitis_saati': '15:40'},
+    	}, 'oglen': {}
+	},
+	'derssaati_sabah_01_basla': "08:30",
+	'derssaati_sabah_01_bitis': "09:10",
+	'derssaati_sabah_02_basla': "09:20",
+	'derssaati_sabah_02_bitis': "10:00",
+	'derssaati_sabah_03_basla': "10:10",
+	'derssaati_sabah_03_bitis': "10:50",
+	'derssaati_sabah_04_basla': "11:00",
+	'derssaati_sabah_04_bitis': "11:40",
+	'derssaati_sabah_05_basla': "12:30",
+	'derssaati_sabah_05_bitis': "13:10",
+	'derssaati_sabah_06_basla': "13:20",
+	'derssaati_sabah_06_bitis': "14:00",
+	'derssaati_sabah_07_basla': "14:10",
+	'derssaati_sabah_07_bitis': "14:50",
+	'derssaati_sabah_08_basla': "15:00",
+	'derssaati_sabah_08_bitis': "15:40",
+	'nobetliste_g1_tamgn_k0': "",
+	'nobetliste_g1_tamgn_k1': "",
+	'nobetliste_g1_tamgn_k2': "",
+	'nobetliste_g1_tamgn_k3': "",
+	'nobetliste_g1_tamgn_k4': "",
+	'nobetliste_g1_tamgn_k5': "",
+	'nobetliste_g2_tamgn_k0': "",
+	'nobetliste_g2_tamgn_k1': "",
+	'nobetliste_g2_tamgn_k2': "",
+	'nobetliste_g2_tamgn_k3': "",
+	'nobetliste_g2_tamgn_k4': "",
+	'nobetliste_g2_tamgn_k5': "",
+	'nobetliste_g3_tamgn_k0': "",
+	'nobetliste_g3_tamgn_k1': "",
+	'nobetliste_g3_tamgn_k2': "",
+	'nobetliste_g3_tamgn_k3': "",
+	'nobetliste_g3_tamgn_k4': "",
+	'nobetliste_g3_tamgn_k5': "",
+	'nobetliste_g4_tamgn_k0': "",
+	'nobetliste_g4_tamgn_k1': "",
+	'nobetliste_g4_tamgn_k2': "",
+	'nobetliste_g4_tamgn_k3': "",
+	'nobetliste_g4_tamgn_k4': "",
+	'nobetliste_g4_tamgn_k5': "",
+	'nobetliste_g5_tamgn_k0': "",
+	'nobetliste_g5_tamgn_k1': "",
+	'nobetliste_g5_tamgn_k2': "",
+	'nobetliste_g5_tamgn_k3': "",
+	'nobetliste_g5_tamgn_k4': "",
+	'nobetliste_g5_tamgn_k5': "",
+	'dersprog_9-A_1_01_sabah': "",
+	'dersprog_9-A_1_02_sabah': "",
+	'dersprog_9-A_1_03_sabah': "",
+	'dersprog_9-A_1_04_sabah': "",
+	'dersprog_9-A_1_05_sabah': "",
+	'dersprog_9-A_1_06_sabah': "",
+	'dersprog_9-A_1_07_sabah': "",
+	'dersprog_9-A_1_08_sabah': "",
+	'dersprog_9-A_2_01_sabah': "",
+	'dersprog_9-A_2_02_sabah': "",
+	'dersprog_9-A_2_03_sabah': "",
+	'dersprog_9-A_2_04_sabah': "",
+	'dersprog_9-A_2_05_sabah': "",
+	'dersprog_9-A_2_06_sabah': "",
+	'dersprog_9-A_2_07_sabah': "",
+	'dersprog_9-A_2_08_sabah': "",
+	'dersprog_9-A_3_01_sabah': "",
+	'dersprog_9-A_3_02_sabah': "",
+	'dersprog_9-A_3_03_sabah': "",
+	'dersprog_9-A_3_04_sabah': "",
+	'dersprog_9-A_3_05_sabah': "",
+	'dersprog_9-A_3_06_sabah': "",
+	'dersprog_9-A_3_07_sabah': "",
+	'dersprog_9-A_3_08_sabah': "",
+	'dersprog_9-A_4_01_sabah': "",
+	'dersprog_9-A_4_02_sabah': "",
+	'dersprog_9-A_4_03_sabah': "",
+	'dersprog_9-A_4_04_sabah': "",
+	'dersprog_9-A_4_05_sabah': "",
+	'dersprog_9-A_4_06_sabah': "",
+	'dersprog_9-A_4_07_sabah': "",
+	'dersprog_9-A_4_08_sabah': "",
+	'dersprog_9-A_5_01_sabah': "",
+	'dersprog_9-A_5_02_sabah': "",
+	'dersprog_9-A_5_03_sabah': "",
+	'dersprog_9-A_5_04_sabah': "",
+	'dersprog_9-A_5_05_sabah': "",
+	'dersprog_9-A_5_06_sabah': "",
+	'dersprog_9-A_5_07_sabah': "",
+	'dersprog_9-A_5_08_sabah': "",
+	'dersprog_9-B_1_01_sabah': "",
+	'dersprog_9-B_1_02_sabah': "",
+	'dersprog_9-B_1_03_sabah': "",
+	'dersprog_9-B_1_04_sabah': "",
+	'dersprog_9-B_1_05_sabah': "",
+	'dersprog_9-B_1_06_sabah': "",
+	'dersprog_9-B_1_07_sabah': "",
+	'dersprog_9-B_1_08_sabah': "",
+	'dersprog_9-B_2_01_sabah': "",
+	'dersprog_9-B_2_02_sabah': "",
+	'dersprog_9-B_2_03_sabah': "",
+	'dersprog_9-B_2_04_sabah': "",
+	'dersprog_9-B_2_05_sabah': "",
+	'dersprog_9-B_2_06_sabah': "",
+	'dersprog_9-B_2_07_sabah': "",
+	'dersprog_9-B_2_08_sabah': "",
+	'dersprog_9-B_3_01_sabah': "",
+	'dersprog_9-B_3_02_sabah': "",
+	'dersprog_9-B_3_03_sabah': "",
+	'dersprog_9-B_3_04_sabah': "",
+	'dersprog_9-B_3_05_sabah': "",
+	'dersprog_9-B_3_06_sabah': "",
+	'dersprog_9-B_3_07_sabah': "",
+	'dersprog_9-B_3_08_sabah': "",
+	'dersprog_9-B_4_01_sabah': "",
+	'dersprog_9-B_4_02_sabah': "",
+	'dersprog_9-B_4_03_sabah': "",
+	'dersprog_9-B_4_04_sabah': "",
+	'dersprog_9-B_4_05_sabah': "",
+	'dersprog_9-B_4_06_sabah': "",
+	'dersprog_9-B_4_07_sabah': "",
+	'dersprog_9-B_4_08_sabah': "",
+	'dersprog_9-B_5_01_sabah': "",
+	'dersprog_9-B_5_02_sabah': "",
+	'dersprog_9-B_5_03_sabah': "",
+	'dersprog_9-B_5_04_sabah': "",
+	'dersprog_9-B_5_05_sabah': "",
+	'dersprog_9-B_5_06_sabah': "",
+	'dersprog_9-B_5_07_sabah': "",
+	'dersprog_9-B_5_08_sabah': "",
+	'dersprog_9-C_1_01_sabah': "",
+	'dersprog_9-C_1_02_sabah': "",
+	'dersprog_9-C_1_03_sabah': "",
+	'dersprog_9-C_1_04_sabah': "",
+	'dersprog_9-C_1_05_sabah': "",
+	'dersprog_9-C_1_06_sabah': "",
+	'dersprog_9-C_1_07_sabah': "",
+	'dersprog_9-C_1_08_sabah': "",
+	'dersprog_9-C_2_01_sabah': "",
+	'dersprog_9-C_2_02_sabah': "",
+	'dersprog_9-C_2_03_sabah': "",
+	'dersprog_9-C_2_04_sabah': "",
+	'dersprog_9-C_2_05_sabah': "",
+	'dersprog_9-C_2_06_sabah': "",
+	'dersprog_9-C_2_07_sabah': "",
+	'dersprog_9-C_2_08_sabah': "",
+	'dersprog_9-C_3_01_sabah': "",
+	'dersprog_9-C_3_02_sabah': "",
+	'dersprog_9-C_3_03_sabah': "",
+	'dersprog_9-C_3_04_sabah': "",
+	'dersprog_9-C_3_05_sabah': "",
+	'dersprog_9-C_3_06_sabah': "",
+	'dersprog_9-C_3_07_sabah': "",
+	'dersprog_9-C_3_08_sabah': "",
+	'dersprog_9-C_4_01_sabah': "",
+	'dersprog_9-C_4_02_sabah': "",
+	'dersprog_9-C_4_03_sabah': "",
+	'dersprog_9-C_4_04_sabah': "",
+	'dersprog_9-C_4_05_sabah': "",
+	'dersprog_9-C_4_06_sabah': "",
+	'dersprog_9-C_4_07_sabah': "",
+	'dersprog_9-C_4_08_sabah': "",
+	'dersprog_9-C_5_01_sabah': "",
+	'dersprog_9-C_5_02_sabah': "",
+	'dersprog_9-C_5_03_sabah': "",
+	'dersprog_9-C_5_04_sabah': "",
+	'dersprog_9-C_5_05_sabah': "",
+	'dersprog_9-C_5_06_sabah': "",
+	'dersprog_9-C_5_07_sabah': "",
+	'dersprog_9-C_5_08_sabah': "",
+	'dersprog_10-A_1_01_sabah': "",
+	'dersprog_10-A_1_02_sabah': "",
+	'dersprog_10-A_1_03_sabah': "",
+	'dersprog_10-A_1_04_sabah': "",
+	'dersprog_10-A_1_05_sabah': "",
+	'dersprog_10-A_1_06_sabah': "",
+	'dersprog_10-A_1_07_sabah': "",
+	'dersprog_10-A_1_08_sabah': "",
+	'dersprog_10-A_2_01_sabah': "",
+	'dersprog_10-A_2_02_sabah': "",
+	'dersprog_10-A_2_03_sabah': "",
+	'dersprog_10-A_2_04_sabah': "",
+	'dersprog_10-A_2_05_sabah': "",
+	'dersprog_10-A_2_06_sabah': "",
+	'dersprog_10-A_2_07_sabah': "",
+	'dersprog_10-A_2_08_sabah': "",
+	'dersprog_10-A_3_01_sabah': "",
+	'dersprog_10-A_3_02_sabah': "",
+	'dersprog_10-A_3_03_sabah': "",
+	'dersprog_10-A_3_04_sabah': "",
+	'dersprog_10-A_3_05_sabah': "",
+	'dersprog_10-A_3_06_sabah': "",
+	'dersprog_10-A_3_07_sabah': "",
+	'dersprog_10-A_3_08_sabah': "",
+	'dersprog_10-A_4_01_sabah': "",
+	'dersprog_10-A_4_02_sabah': "",
+	'dersprog_10-A_4_03_sabah': "",
+	'dersprog_10-A_4_04_sabah': "",
+	'dersprog_10-A_4_05_sabah': "",
+	'dersprog_10-A_4_06_sabah': "",
+	'dersprog_10-A_4_07_sabah': "",
+	'dersprog_10-A_4_08_sabah': "",
+	'dersprog_10-A_5_01_sabah': "",
+	'dersprog_10-A_5_02_sabah': "",
+	'dersprog_10-A_5_03_sabah': "",
+	'dersprog_10-A_5_04_sabah': "",
+	'dersprog_10-A_5_05_sabah': "",
+	'dersprog_10-A_5_06_sabah': "",
+	'dersprog_10-A_5_07_sabah': "",
+	'dersprog_10-A_5_08_sabah': "",
+	'dersprog_10-B_1_01_sabah': "",
+	'dersprog_10-B_1_02_sabah': "",
+	'dersprog_10-B_1_03_sabah': "",
+	'dersprog_10-B_1_04_sabah': "",
+	'dersprog_10-B_1_05_sabah': "",
+	'dersprog_10-B_1_06_sabah': "",
+	'dersprog_10-B_1_07_sabah': "",
+	'dersprog_10-B_1_08_sabah': "",
+	'dersprog_10-B_2_01_sabah': "",
+	'dersprog_10-B_2_02_sabah': "",
+	'dersprog_10-B_2_03_sabah': "",
+	'dersprog_10-B_2_04_sabah': "",
+	'dersprog_10-B_2_05_sabah': "",
+	'dersprog_10-B_2_06_sabah': "",
+	'dersprog_10-B_2_07_sabah': "",
+	'dersprog_10-B_2_08_sabah': "",
+	'dersprog_10-B_3_01_sabah': "",
+	'dersprog_10-B_3_02_sabah': "",
+	'dersprog_10-B_3_03_sabah': "",
+	'dersprog_10-B_3_04_sabah': "",
+	'dersprog_10-B_3_05_sabah': "",
+	'dersprog_10-B_3_06_sabah': "",
+	'dersprog_10-B_3_07_sabah': "",
+	'dersprog_10-B_3_08_sabah': "",
+	'dersprog_10-B_4_01_sabah': "",
+	'dersprog_10-B_4_02_sabah': "",
+	'dersprog_10-B_4_03_sabah': "",
+	'dersprog_10-B_4_04_sabah': "",
+	'dersprog_10-B_4_05_sabah': "",
+	'dersprog_10-B_4_06_sabah': "",
+	'dersprog_10-B_4_07_sabah': "",
+	'dersprog_10-B_4_08_sabah': "",
+	'dersprog_10-B_5_01_sabah': "",
+	'dersprog_10-B_5_02_sabah': "",
+	'dersprog_10-B_5_03_sabah': "",
+	'dersprog_10-B_5_04_sabah': "",
+	'dersprog_10-B_5_05_sabah': "",
+	'dersprog_10-B_5_06_sabah': "",
+	'dersprog_10-B_5_07_sabah': "",
+	'dersprog_10-B_5_08_sabah': "",
+	'dersprog_10-C_1_01_sabah': "",
+	'dersprog_10-C_1_02_sabah': "",
+	'dersprog_10-C_1_03_sabah': "",
+	'dersprog_10-C_1_04_sabah': "",
+	'dersprog_10-C_1_05_sabah': "",
+	'dersprog_10-C_1_06_sabah': "",
+	'dersprog_10-C_1_07_sabah': "",
+	'dersprog_10-C_1_08_sabah': "",
+	'dersprog_10-C_2_01_sabah': "",
+	'dersprog_10-C_2_02_sabah': "",
+	'dersprog_10-C_2_03_sabah': "",
+	'dersprog_10-C_2_04_sabah': "",
+	'dersprog_10-C_2_05_sabah': "",
+	'dersprog_10-C_2_06_sabah': "",
+	'dersprog_10-C_2_07_sabah': "",
+	'dersprog_10-C_2_08_sabah': "",
+	'dersprog_10-C_3_01_sabah': "",
+	'dersprog_10-C_3_02_sabah': "",
+	'dersprog_10-C_3_03_sabah': "",
+	'dersprog_10-C_3_04_sabah': "",
+	'dersprog_10-C_3_05_sabah': "",
+	'dersprog_10-C_3_06_sabah': "",
+	'dersprog_10-C_3_07_sabah': "",
+	'dersprog_10-C_3_08_sabah': "",
+	'dersprog_10-C_4_01_sabah': "",
+	'dersprog_10-C_4_02_sabah': "",
+	'dersprog_10-C_4_03_sabah': "",
+	'dersprog_10-C_4_04_sabah': "",
+	'dersprog_10-C_4_05_sabah': "",
+	'dersprog_10-C_4_06_sabah': "",
+	'dersprog_10-C_4_07_sabah': "",
+	'dersprog_10-C_4_08_sabah': "",
+	'dersprog_10-C_5_01_sabah': "",
+	'dersprog_10-C_5_02_sabah': "",
+	'dersprog_10-C_5_03_sabah': "",
+	'dersprog_10-C_5_04_sabah': "",
+	'dersprog_10-C_5_05_sabah': "",
+	'dersprog_10-C_5_06_sabah': "",
+	'dersprog_10-C_5_07_sabah': "",
+	'dersprog_10-C_5_08_sabah': "",
+	'ders_programi' : {
+		"crs": {
+			"oglen":{},
+			"sabah":{
+				"01":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"02":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"03":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"04":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"05":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"06":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"07":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"08":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""}
+			}
+		},
+		"cum": {
+			"oglen":{},
+			"sabah":{
+				"01":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"02":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"03":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"04":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"05":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"06":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"07":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"08":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""}
+			}
+		},
+		"per":{
+			"oglen":{},
+			"sabah":{
+				"01":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"02":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"03":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"04":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"05":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"06":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"07":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"08":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""}
+			}
+		},
+		"pzt":{
+			"oglen":{},
+			"sabah":{
+				"01":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"02":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"03":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"04":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"05":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"06":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"07":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"08":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""}
+			}
+		},
+		"sal":{
+			"oglen":{},
+			"sabah":{
+				"01":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"02":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"03":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"04":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"05":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"06":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"07":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""},
+				"08":{"10-A":"","10-B":"","10-C":"","9-A":"","9-B":"","9-C":""}
+			}
+		}
+	}
+	};
+
 	if(evt.reason == "install") {
-		chrome.storage.local.set(kayitlar, function () {
-			panoPenceresi();
+		chrome.storage.local.set(kayitlar, panoPenceresi);
+	}
+	if(evt.reason == "update") {
+		chrome.storage.local.get(function (degerler) {
+			for (var i in kayitlar) {
+				if (!degerler[i] || degerler[i] == undefined)
+					degerler[i] = kayitlar[i];
+			}
+			degerler['version'] = chrome.runtime.getManifest().version; 
+			chrome.storage.local.set(degerler, panoPenceresi);
 		});
 	}
 });
 
-chrome.app.runtime.onLaunched.addListener(function() {
-
-	chrome.alarms.clearAll();
-
-	panoPenceresi();
-
-	chrome.contextMenus.removeAll(function() {
-		chrome.contextMenus.create({ title: 'Tam Ekran', id: 'menuTamEkran', contexts: ['all'] , type: 'checkbox' });
-		chrome.contextMenus.create({ title: 'Ayraç', id: 'menuAyrac', contexts: ['all'], type: 'separator' });
-		chrome.contextMenus.create({ title: 'Ayarlar', id: 'menuAyarlar', contexts: ['all'] });
-		chrome.contextMenus.create({ title: 'Küçült', id: 'menuKucult', contexts: ['all'] });
-		chrome.contextMenus.create({ title: 'Çıkış', id: 'menuCikis', contexts: ['all'] });
-	});
-
-	chrome.contextMenus.onClicked.addListener(function(item) {
-		switch (item.menuItemId) {
-			case 'menuAyarlar':
-			ayarlarPenceresi();
-			break;
-			case 'menuKucult':
-			for (var i in acikPencereler) {
-				acikPencereler[i].minimize();
-			}
-			break;
-			case 'menuTamEkran':
-			acikPencereler.pano.contentWindow.tamEkranToggle();
-			break;
-			case 'menuCikis':
-			
-			for (var i in acikPencereler) {
-				acikPencereler[i].close();
-			}
-			break;
-		}
-	});
-});
-
-chrome.runtime.onMessage.addListener(function (mesaj) {
-	switch (mesaj) {
-		case 'restart':
-			restartRequest = true;
-			for (var i in acikPencereler) {
-				acikPencereler[i].close();
-			}
-		break;
-	}
-});
+chrome.app.runtime.onLaunched.addListener(panoPenceresi);

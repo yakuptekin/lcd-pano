@@ -7,16 +7,18 @@
 }
 
 body {
-	background-color: #fff;
+	background-color: #000;
 	font-size: 62.5%;
 	margin: 0;
 	padding: 0;
 	overflow: hidden;
+	-webkit-font-smoothing: antialiased;
 }
 
 body * {
 	font-size: 100%;
 	font-family: Arial, Helvetica, sans-serif;
+	
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -67,7 +69,12 @@ div.clearFloat {
 /* GENEL YAPI */
 
 #main {
-	margin: 0 auto;
+	position: absolute;
+    top:0;
+    bottom: 0;
+	left: 0;
+    right: 0;
+	margin: auto;
 	width: 1200px;
 	height: 675px;
 	background:
@@ -117,7 +124,7 @@ div.clearFloat {
 	height: 140px;
 	background-image: url('../img/logo.png');
 	background-repeat: no-repeat;
-	z-index: 99;
+	z-index: 5;
 	margin: 0;
 	-webkit-app-region: drag;
 }
@@ -127,8 +134,9 @@ div.clearFloat {
 	margin-left: 0px;
 	margin-top: 0px;
 	width: 310px;
+	display: block;
 }
-#nobetci_per_baslik {
+#nobetci_per_baslik, #ozelmodul_baslik {
 	margin-left: 10px;
 	margin-top: 10px;
 	display: inline;
@@ -136,12 +144,15 @@ div.clearFloat {
 	height: 48px;
 	margin-bottom: 0;
 	width: 298px;
-	background-image:-webkit-linear-gradient(-90deg,rgb(250,190,172) 0%,rgb(236,103,77) 49%,rgb(236,43,0) 49%,rgb(187,39,3) 98%,rgb(185,37,0) 99%);
-	border-color:rgb(206,34,0);
-	border-width:1px;
-	border-style:solid;
+	
 }
-#nobetci_per_icerik {
+
+#nobetci_per_baslik {
+	border:1px solid rgb(206,34,0);
+	background-image:-webkit-linear-gradient(-90deg,rgb(250,190,172) 0%,rgb(236,103,77) 49%,rgb(236,43,0) 49%,rgb(187,39,3) 98%,rgb(185,37,0) 99%);
+}
+
+#nobetci_per_icerik, #ozelmodul_icerik_wrap {
 	margin-left: 10px;
 	margin-top: 0px;
 	display: inline;
@@ -154,16 +165,35 @@ div.clearFloat {
 	border-width:1px;
 	border-style:solid;
 	text-align: center;
-	overflow: auto;
+	overflow: hidden;
+	width:298px;
+	height:338px;
 }
-#nobetci_per_icerik tr:nth-child(even) {
+
+#nobetci_per_tablo {
+	position: relative;
+	top: 0px;
+	-webkit-transition:top 2s ease;
+}
+#nobetci_per_tablo tr:nth-child(even) {
 	background: #ECDEE3;
 }
-#nobetci_per_icerik tr:nth-child(odd) {
+#nobetci_per_tablo tr:nth-child(odd) {
+	background: #FAC2CE;
+}
+#ders_programi_tablo {
+	position: relative;
+	top: 0px;
+	-webkit-transition:top 2s ease;
+}
+#ders_programi_tablo tr:nth-child(even) {
+	background: #ECDEE3;
+}
+#ders_programi_tablo tr:nth-child(odd) {
 	background: #FAC2CE;
 }
 #orta_slayt {
-	margin-left: 10px;
+	margin-left: 320px;
 	margin-top: 10px;
 	display: inline;
 	float: left;
@@ -182,37 +212,34 @@ div.clearFloat {
 	background-repeat: no-repeat;
 	background-position: center center;
 	position:relative;
-	width:100%;
-	height:auto;
 	overflow: hidden;
 	width: 540px;
 	height: 365px;
 	margin: 15px auto;
-	border: 1px solid #999;
+	border: none;
 	font-size: 20px;
 }
 
 #slider img {
-	position:absolute;
-	top:0px;
-	left:0px;
-	max-width: none;
 	width: 540px !important;
 	height: 365px !important;
+	-webkit-box-shadow: 3px 3px 3px #7C7C7C;
 }
 
-.fluxslider {
-	width: 540px !important;
-	height: 365px !important;
+.slayt_hata {
+	margin-top: 100px;
+	font-weight: bold;
 }
+
 #colwrap2 {
 	float: right;
 	margin-right: 10px;
 	margin-top: 0px;
 	width: 310px;
+	height: 480px;
 }
 
-#hava_durumu_icerik {
+#ders_programi_icerik, #hava_durumu_icerik {
 	margin-left: 10px;
 	margin-top: 0px;
 	display: inline;
@@ -220,30 +247,44 @@ div.clearFloat {
 	margin-bottom: 0;
 	background-image:-webkit-linear-gradient(-90deg,rgb(255,255,255) 0%,rgb(243,243,243) 81%,rgb(219,219,219) 97%,rgb(216,216,216) 98%);
 	width:298px;
-	height:138px;
 	border-color:rgb(125,135,145);
 	border-width:1px;
 	border-style:solid;
 	font-size: 16px;
 }
 
-#hava_durumu_baslik {
+#hava_durumu_icerik {
+	height:138px;
+}
+
+#ders_programi_icerik {
+	height:523px;
+}
+
+#ders_programi_baslik, #hava_durumu_baslik {
 	margin-left: 10px;
 	margin-top: 10px;
 	display: inline;
 	float: left;
 	margin-bottom: 0;
-	background-image:-webkit-linear-gradient(-90deg,rgb(216,242,251) 0%,rgb(159,225,246) 50%,rgb(20,131,184) 50%,rgb(96,183,218) 94%,rgb(107,190,223) 100%);
 	width:298px;
 	height:48px;
-	border-color:rgb(15,146,189);
-	border-width:1px;
-	border-style:solid;
+}
+
+#ders_programi_baslik {
+	border: 1px solid #BC522B;
+	background: -webkit-linear-gradient(top, #ef845d 0%,#8c3310 50%,#752201 51%,#bc522b 100%);
+}
+
+#hava_durumu_baslik {
+	border: 1px solid rgb(15,146,189);
+	background-image:-webkit-linear-gradient(-90deg,rgb(216,242,251) 0%,rgb(159,225,246) 50%,rgb(20,131,184) 50%,rgb(96,183,218) 94%,rgb(107,190,223) 100%);
 }
 
 #haberler {
 	font: normal 11px Arial;
 	width: 298px;
+	height: 372px;
 	border:solid 1px #ccc;
 	border-radius: 3px;
 	box-shadow: 1px 1px 3px #ccc;
@@ -262,8 +303,8 @@ div.clearFloat {
 }
 
 #trthaber {
-	width: 298px;
-	height: 326px;
+	width: 100%;
+	height: 86%;
 	background-image: url('../img/loading.gif');
 	background-repeat: no-repeat;
 	background-position: center center;
@@ -287,6 +328,8 @@ div.clearFloat {
 	text-shadow: 2px 2px 2px #ccc;
 	color: #D8000C;
 	font-weight: bold;
+	overflow: hidden;
+	text-align: center;
 }
 
 /* --- GENEL YAPI SON --- */
@@ -303,6 +346,14 @@ div.clearFloat {
 	line-height: 80px;
 	margin-right: 10px;
 }
+
+#suan_kalan {
+	text-align: center;
+	margin: 2px;
+	padding: 10px;
+	font-size: 20px;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fff6ad), color-stop(40%,#f7ed2c), color-stop(68%,#efd700), color-stop(100%,#f9fc46));
+	}
 
 #error {
     display: none;
@@ -321,4 +372,44 @@ div.clearFloat {
     top: 10px;
     left: 10px;
     z-index: 999;
+}
+
+#suanki_dersler {
+	height: 446px;
+	overflow: hidden;
+}
+
+#ozelmodul_icerik_wrap2 {
+	height: 318px;
+	margin: 10px;
+	overflow: hidden;
+}
+
+#ozelmodul_icerik {
+	position: relative;
+	top: 0px;
+	text-align: left;
+	font-size: 14px;
+	-webkit-transition:top 2s ease;
+}
+
+#ozelmodul_baslik {
+	border:1px solid #6B064B;
+	background: -webkit-linear-gradient(top, #cb60b3 0%,#aa0a7d 50%,#c62982 100%);
+}
+
+#preloader
+{
+	height:100%;
+	width:100%;
+	position:fixed;
+	left:0px;
+	top:0px;
+	opacity: 1;
+	z-index:10 !important;
+	background-color: #fff;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-image: url('../img/loading.gif');
+	-webkit-transition: opacity 1s ease-out;
 }

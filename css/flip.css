@@ -1,0 +1,41 @@
+#colwrap1, #colwrap2 {
+	-webkit-perspective: 1000;
+}
+	/* flip the pane when hovered */
+	.flip1 .flipper1 {
+		-webkit-transform: rotateY(-180deg);
+	}
+
+	.flip2 .flipper2 {
+		-webkit-transform: rotateY(180deg);
+	}
+
+/* flip speed goes here */
+.flipper1, .flipper2 {
+	-webkit-transition: 1s;
+	-webkit-transform-style: preserve-3d;
+	position: relative;
+}
+
+/* hide back of pane during swap */
+.front1, .front2, .back1, .back2 {
+	-webkit-backface-visibility: hidden;
+
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+/* front pane, placed above back */
+.front1, .front2 {
+	z-index: 2;
+}
+
+/* back, initially hidden pane */
+.back1 {
+	-webkit-transform: rotateY(-180deg);
+}
+
+.back2 {
+	-webkit-transform: rotateY(180deg);
+}
