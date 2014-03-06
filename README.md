@@ -3,7 +3,7 @@ lcd-pano
 
 Okullar için Dijital Pano Uygulaması
 
-LCD Pano, başta kendi okulum için hazırladığım, sonradan herkesin faydalanabilmesi için Chrome uygulaması haline getirdiğim bir dijital pano uygulamasıdır. Katlarınızda bulunan LCD TV'leri daha etkin kullanabilmenizi sağlar. Renkli arayüzüyle okulunuza canlılık getirir.
+LCD Pano, okul koridorlarınızda bulunan LCD TV'leri daha etkin kullanabilmenizi sağlar. Renkli arayüzüyle okulunuza canlılık getirir.
 
 ÖZELLİKLER:
 * Okul ismi gösterimi
