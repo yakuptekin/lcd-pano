@@ -18,25 +18,15 @@
     <div id="sekmeler">
         <ul> 
             <li><a href="#genel">GENEL AYARLAR</a></li> 
-            <li><a href="#nobet">NÖBET PROGRAMI</a></li>
-            <li><a href="#ders_prog">DERS PROGRAMLARI</a></li>
             <li><a href="#ozelmodul">ÖZEL MODÜL</a></li>
         </ul>
         <div id="genel">
             <table>
                 <tr>
-                    <td width="25%">Okul Adı:</td><td width="75%"><input type="text" name="okul_adi" id="okul_adi" /></td>
+                    <td width="25%">işletme adı:</td><td width="75%"><input type="text" name="okul_adi" id="okul_adi" /></td>
                 </tr>
                 <tr>
-                    <td>Öğretim Şekli:</td>
-                    <td>
-                        <input type="radio" name="ogretim_turu" value="tamgn" id="ogretim_turu_0" />
-                        <label for="ogretim_turu_0">Normal Öğretim</label>
-                        <input type="radio" name="ogretim_turu" value="ikili" id="ogretim_turu_1" />
-                        <label for="ogretim_turu_1">İkili Öğretim</label>
-                        <span id="ikili_ogretim_alani"> | Nöbet değişim saati: 
-                            <input type="time" id="nobet_degisim_saati" title="İkili öğretim seçmeniz durumunda öğlen ders giriş çıkış saatlerini doldurmayı unutmayınız." />
-                        </span>
+                    </span>
                     </td>
                 </tr>
                 <tr>
@@ -61,27 +51,12 @@
                     <td><input type="range" name="slayt_cuboid" id="slayt_cuboid" min="1" max="8" />
                     <output id="slayt_cuboid_gosterge" name="slayt_cuboid_gosterge" for="slayt_cuboid">
                     </output> (yavaş pc'ler için düşürün)</td>
-                </tr>
-				
                 <tr>
-                    <td>Nöbetçi Personel Yazı Boyutu:</td>
-                    <td>
-                        <input type="range" id="nob_per_punto" name="nob_per_punto" min="8" max="24" /> 
-                        <output id="nob_per_punto_gosterge" name="nob_per_punto_gosterge" for="nob_per_punto"></output> px
-                    </td>
-                </tr>
-                <tr>
-                    <td>Ders Programı Tablosu Yazı Boyutu:</td>
-                    <td>
-                        <input type="range" id="ders_prog_punto" name="ders_prog_punto" min="8" max="24" /> 
-                        <output id="ders_prog_punto_gosterge" name="ders_prog_punto_gosterge" for="ders_prog_punto"></output> px
                     </td>
                 </tr>
                 <tr>
                     <td>Sol Bölüm Seçenekleri:</td>
                     <td>
-                        <input type="radio" name="sol_moduller" value="nobpersonel" id="rbnobpersonel" />
-                        <label for="rbnobpersonel">Yalnızca Nöb. Personel Etkin</label>
                         <input type="radio" name="sol_moduller" value="ozel" id="rbozel" />
                         <label for="rbozel">Yalnızca Özel Modül Etkin</label>
                         <input type="radio" name="sol_moduller" value="ikiside" id="rbsolmodultumu" />
@@ -94,8 +69,7 @@
                         <input type="radio" name="sag_moduller" value="havahaber" id="rbhavahaber" />
                         <label for="rbhavahaber">Yalnızca Hv. Durumu-Haberler Etkin</label>
                         <input type="radio" name="sag_moduller" value="dersprog" id="rbdersprog" />
-                        <label for="rbdersprog">Yalnızca Ders Prog.-Ders Saatleri Etkin</label>
-                        <input type="radio" name="sag_moduller" value="ikiside" id="rbsagmodultumu" />
+                        input type="radio" name="sag_moduller" value="ikiside" id="rbsagmodultumu" />
                         <label for="rbsagmodultumu">İkisi de Etkin (süreli gösterim)</label>
                     </td>
                 </tr>
@@ -161,40 +135,24 @@
                         </td>
                     </tr>
                 </table>
-                <table id="nobet_tablosu"></table>
                 <p>
-                    <i>(*) Aynı mahalde birden fazla nöbetçi öğretmen olduğu durumlarda isimlerini virgülle ayırınız.</i>
+                    <i>(*) </i>
                 </p>
         </div>
-        <div id="ders_prog">
+        <div id="">
             <table>
                 <tr>
                     <td width="22%" style="font-weight: normal;"><strong>DERS PROGRAMLARI</strong>
                         <ol>
-                            <li>Genel ayarlardan öğretim şeklinizi seçiniz.<i>(Öğretim şeklinize göre ders saatleri tablosu ikiye bölünecektir.)</i></li>
-                            <li>Sınıfları yandaki kutuya virgüllerle giriniz.</li>
-                            <li>Derslerinizin başlangıç bitiş saatlerini giriniz. (* zorunludur.)</li>
-                            <li>Günlük ders sayınızı seçiniz. <i>(İkili öğretim yapan okullar için yarım günlük seçiniz.)</i></li>
-                        </ol>
                     </td>
                     <td width="78%">
-                        <input type="text" id="siniflar" name="siniflar" /><br />
-                        <label for="gunluk_ders_sayisi">Günlük Ders Sayısı: </label>
-                        <input type="range" id="gunluk_ders_sayisi" name="gunluk_ders_sayisi" min="2" max="10" />
-                        <output id="gunluk_ders_sayisi_gosterge" name="gunluk_ders_sayisi_gosterge" for="gunluk_ders_sayisi"></output><br><br>
-                        <table id="ders_saatleri">
-                            <tr><td id="sabah_dersleri"></td></tr>
-                            <tr><td id="oglen_dersleri"></td></tr>
                         </table>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <div id="siniflar_listbox_kapsayici">
-                            <select id="siniflar_listbox" name="siniflar_listbox" size="10"></select>
                         </div>
-                        <div id="ders_prog_kapsayici"></div>
-                    </td>
+                        </td>
                 </tr>
             </table>
         </div>
